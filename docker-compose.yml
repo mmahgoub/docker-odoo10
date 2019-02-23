@@ -6,6 +6,8 @@ services:
       - db
     ports:
       - "8069:8069"
+    volumes:
+      - ./addons:/mnt/extra-addons
   db:
     image: postgres:10
     environment:
