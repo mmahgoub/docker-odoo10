@@ -1,7 +1,8 @@
 version: '3'
 services:
   web:
-    image: odoo:10.0
+    image: softwex-odoo:1.0
+    build: .
     depends_on:
       - db
     ports:
