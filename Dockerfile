@@ -10,7 +10,6 @@ RUN set -x; \
             dirmngr \
             node-less \
             python-dateutil python-docutils python-feedparser \
-        #     python-inja2 
             python-ldap python-libxslt1 python-lxml \
             python-mako python-mock python-openid python-psycopg2 python-psutil python-pybabel python-pychart python-pydot \ 
             python-pyparsing python-reportlab python-simplejson python-tz python-unittest2 python-vatnumber python-vobject \
@@ -19,9 +18,9 @@ RUN set -x; \
             python-zsi python-yaml python-argparse python-openssl python-egenix-mxdatetime python-usb python-serial lptools \
             make python-pydot python-psutil python-paramiko poppler-utils python-pdftools antiword python-requests \
             python-xlsxwriter python-suds python-psycogreen python-ofxparse python-gevent  python-imaging python-jinja2\
-        # && curl -o wkhtmltox.deb -sSL https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.jessie_amd64.deb \
-        # && echo '4d104ff338dc2d2083457b3b1e9baab8ddf14202 wkhtmltox.deb' | sha1sum -c - \
-        # && dpkg --force-depends -i wkhtmltox.deb \
+        && curl -o wkhtmltox.deb -sSL https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.xenial_arm64.deb \
+        && echo '6f065bc81ceb636dcbb532463fe2d50c7e6cdb68 wkhtmltox.deb' | sha1sum -c - \
+        && dpkg --force-depends -i wkhtmltox.deb \
         && apt-get -y install -f --no-install-recommends \
         && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false npm \
         && rm -rf /var/lib/apt/lists/* wkhtmltox.deb \
@@ -30,15 +29,9 @@ RUN set -x; \
 
 RUN curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor | tee /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg >/dev/null
 RUN set -x; 
-# sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main" >> /etc/apt/sources.list.d/postgresql.list'
 
-# install latest postgresql-client
-# RUN set -x; \
-# sh -c 'echo "deb https://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main" > /etc/apt/sources.list.d/pgdg.list' \
-# && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
 RUN apt-get update \
 && apt-get -y install postgresql
-
 
 RUN adduser --system --home=/opt/odoo --group odoo
 RUN mkdir /var/lib/odoo && chown odoo /var/lib/odoo
