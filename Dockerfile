@@ -1,4 +1,4 @@
-FROM ubuntu:xenial
+FROM --platform=linux/amd64 ubuntu:xenial
 
 # Install some deps, lessc and less-plugin-clean-css, and wkhtmltopdf
 RUN set -x; \
@@ -17,15 +17,13 @@ RUN set -x; \
             python-passlib python-decorator gcc python-dev mc bzr python-setuptools python-markupsafe python-reportlab-accel \
             python-zsi python-yaml python-argparse python-openssl python-egenix-mxdatetime python-usb python-serial lptools \
             make python-pydot python-psutil python-paramiko poppler-utils python-pdftools antiword python-requests \
-            python-xlsxwriter python-suds python-psycogreen python-ofxparse python-gevent  python-imaging python-jinja2\
-        && curl -o wkhtmltox.deb -sSL https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.xenial_arm64.deb \
-        && echo '6f065bc81ceb636dcbb532463fe2d50c7e6cdb68 wkhtmltox.deb' | sha1sum -c - \
+            python-xlsxwriter python-suds python-psycogreen python-ofxparse python-gevent  python-imaging python-jinja2
+RUN curl -o wkhtmltox.deb -sSL https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.xenial_amd64.deb \
+        # && echo '6f065bc81ceb636dcbb532463fe2d50c7e6cdb68 wkhtmltox.deb' | sha1sum -c - \
         && dpkg --force-depends -i wkhtmltox.deb \
         && apt-get -y install -f --no-install-recommends \
         && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false npm \
-        && rm -rf /var/lib/apt/lists/* wkhtmltox.deb \
-        && pip install psycogreen==1.0 \
-	&& pip install num2words
+        && rm -rf /var/lib/apt/lists/* wkhtmltox.deb
 
 RUN curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor | tee /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg >/dev/null
 RUN set -x; 
@@ -37,6 +35,24 @@ RUN adduser --system --home=/opt/odoo --group odoo
 RUN mkdir /var/lib/odoo && chown odoo /var/lib/odoo
 RUN mkdir /var/log/odoo && chown odoo /var/log/odoo
 
+RUN pip install --upgrade pip==9.0.3
+RUN pip install --upgrade pip==18.0
+RUN pip install --upgrade pip
+RUN pip install virtualenv
+
+USER odoo
+RUN virtualenv /opt/odoo/ve
+RUN  . /opt/odoo/ve/bin/activate
+
+RUN pip install psycogreen==1.0
+RUN pip install num2words
+RUN pip install --upgrade wheel
+RUN pip install numpy==1.16.6 --user
+RUN pip install Cython==0.29 --install-option="--no-cython-compile" --user
+RUN pip install pandas==0.24.2 --user
+RUN pip install xlsxwriter==0.7.3 --user
+
+USER root
 # Install Odoo
 ENV ODOO_VERSION 10.0
 ARG ODOO_RELEASE=latest
