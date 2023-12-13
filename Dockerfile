@@ -31,8 +31,9 @@ RUN set -x;
 RUN apt-get update \
 && apt-get -y install postgresql
 
-RUN adduser --system --home=/opt/odoo --group odoo
-RUN mkdir /var/lib/odoo && chown odoo /var/lib/odoo
+RUN adduser --system --home=/var/lib/odoo --group odoo
+WORKDIR /var/lib/odoo
+# RUN mkdir /var/lib/odoo && chown odoo /var/lib/odoo
 RUN mkdir /var/log/odoo && chown odoo /var/log/odoo
 
 RUN pip install --upgrade pip==9.0.3
@@ -41,8 +42,8 @@ RUN pip install --upgrade pip
 RUN pip install virtualenv
 
 USER odoo
-RUN virtualenv /opt/odoo/ve
-RUN  . /opt/odoo/ve/bin/activate
+RUN virtualenv /var/lib/odoo/ve
+RUN  . /var/lib/odoo/ve/bin/activate
 
 RUN pip install psycogreen==1.0
 RUN pip install num2words
@@ -50,7 +51,7 @@ RUN pip install --upgrade wheel
 RUN pip install numpy==1.16.6 --user
 RUN pip install Cython==0.29 --install-option="--no-cython-compile" --user
 RUN pip install pandas==0.24.2 --user
-RUN pip install xlsxwriter==0.7.3 --user
+RUN pip install xlsxwriter==0.7.3
 
 USER root
 # Install Odoo
@@ -84,6 +85,6 @@ ENV ODOO_RC /etc/odoo/odoo.conf
 
 # Set default user when running the container
 USER odoo
-ENV PATH="/opt/odoo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+ENV PATH="/var/lib/odoo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["odoo"]
