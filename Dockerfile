@@ -31,9 +31,9 @@ RUN set -x;
 RUN apt-get update \
 && apt-get -y install postgresql
 
-RUN adduser --system --home=/var/lib/odoo --group odoo
-WORKDIR /var/lib/odoo
-# RUN mkdir /var/lib/odoo && chown odoo /var/lib/odoo
+RUN adduser --system --home=/opt/odoo --group odoo
+WORKDIR /opt/odoo
+RUN mkdir /var/lib/odoo && chown odoo /var/lib/odoo
 RUN mkdir /var/log/odoo && chown odoo /var/log/odoo
 
 RUN pip install --upgrade pip==9.0.3
@@ -42,8 +42,8 @@ RUN pip install --upgrade pip
 RUN pip install virtualenv
 
 USER odoo
-RUN virtualenv /var/lib/odoo/ve
-RUN  . /var/lib/odoo/ve/bin/activate
+RUN virtualenv /opt/odoo/ve
+RUN  . /opt/odoo/ve/bin/activate
 
 RUN pip install psycogreen==1.0
 RUN pip install num2words
@@ -85,6 +85,6 @@ ENV ODOO_RC /etc/odoo/odoo.conf
 
 # Set default user when running the container
 USER odoo
-ENV PATH="/var/lib/odoo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+ENV PATH="/opt/odoo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["odoo"]
