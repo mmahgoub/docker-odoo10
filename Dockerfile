@@ -39,11 +39,11 @@ RUN mkdir /var/log/odoo && chown odoo /var/log/odoo
 RUN pip install --upgrade pip==9.0.3
 RUN pip install --upgrade pip==18.0
 RUN pip install --upgrade pip
-RUN pip install virtualenv
+# RUN pip install virtualenv
 
 USER odoo
-RUN virtualenv /opt/odoo/ve
-RUN  . /opt/odoo/ve/bin/activate
+# RUN virtualenv /opt/odoo/ve
+# RUN  . /opt/odoo/ve/bin/activate
 
 RUN pip install psycogreen==1.0
 RUN pip install num2words
