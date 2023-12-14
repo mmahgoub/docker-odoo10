@@ -19,7 +19,7 @@ RUN set -x; \
             make python-pydot python-psutil python-paramiko poppler-utils python-pdftools antiword python-requests \
             python-xlsxwriter python-suds python-psycogreen python-ofxparse python-gevent  python-imaging python-jinja2
 RUN curl -o wkhtmltox.deb -sSL https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.xenial_amd64.deb \
-        # && echo '6f065bc81ceb636dcbb532463fe2d50c7e6cdb68 wkhtmltox.deb' | sha1sum -c - \
+        && echo '61a1e5cf4f63ba1bc517ddf18a7d8fd95973f717 wkhtmltox.deb' | sha1sum -c - \
         && dpkg --force-depends -i wkhtmltox.deb \
         && apt-get -y install -f --no-install-recommends \
         && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false npm \
