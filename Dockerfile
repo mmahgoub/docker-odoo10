@@ -32,18 +32,15 @@ RUN apt-get update \
 && apt-get -y install postgresql
 
 RUN adduser --system --home=/opt/odoo --group odoo
-WORKDIR /opt/odoo
 RUN mkdir /var/lib/odoo && chown odoo /var/lib/odoo
 RUN mkdir /var/log/odoo && chown odoo /var/log/odoo
 
+WORKDIR /var/lib/odoo
 RUN pip install --upgrade pip==9.0.3
 RUN pip install --upgrade pip==18.0
 RUN pip install --upgrade pip
-# RUN pip install virtualenv
 
 USER odoo
-# RUN virtualenv /opt/odoo/ve
-# RUN  . /opt/odoo/ve/bin/activate
 
 RUN pip install psycogreen==1.0
 RUN pip install num2words
